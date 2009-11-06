@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:layout_weight="2">
+	
+    <VideoView 
+    android:id="@+id/VideoView01" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    </VideoView>
+    
+
+</LinearLayout>
+	
+    <LinearLayout
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:layout_weight="2">
+	<LinearLayout
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:layout_weight="1">
+
+    <LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:layout_weight="1" android:orientation="horizontal">
+	
+	
+    <LinearLayout android:id="@+id/LinearLayout01" android:layout_weight="1" android:layout_height="fill_parent" android:layout_width="fill_parent"><EditText 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content" 
+android:id="@+id/ipaddress" 
+android:layout_gravity="bottom" android:text="10.0.1.90">
+</EditText>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/okbutton" android:layout_gravity="bottom" android:background="@drawable/sync">
+</Button><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/up" android:id="@+id/upbutton" android:padding="30dp" android:layout_gravity="center" android:layout_marginLeft="60dp">
+	</ImageButton></LinearLayout>
+
+</LinearLayout>
+    
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1">
+	
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:orientation="horizontal" android:layout_marginLeft="160dp">
+	
+	<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/left" android:id="@+id/leftbutton" android:padding="30dp" android:layout_gravity="center" android:layout_marginRight="40dp">
+	</ImageButton>
+	
+	
+	
+
+<ImageButton android:background="@drawable/right" android:id="@+id/rightbutton" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center" android:padding="30dp">
+	</ImageButton></LinearLayout>
+	
+	
+	
+
+</LinearLayout>
+    
+    
+<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:layout_weight="1" android:orientation="horizontal">
+	
+   <ZoomControls android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="55dp" android:id="@+id/zoombutton"></ZoomControls><ImageButton 
+   android:layout_width="wrap_content" 
+   android:layout_height="wrap_content" 
+   android:id="@+id/downbutton" 
+   android:padding="30dp" android:background="@drawable/down">
+   </ImageButton>
+
+
+
+</LinearLayout>
+
+</LinearLayout>
+
+<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="horizontal" android:layout_weight="4">
+	
+
+
+
+
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom" android:text="Status ..." android:id="@+id/status"></TextView>
+</LinearLayout>
+
+</LinearLayout>
+</LinearLayout>
+
