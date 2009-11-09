@@ -9,13 +9,14 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:layout_weight="2">
 	
-    <VideoView 
-    android:id="@+id/VideoView01" 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    </VideoView>
+    
     
 
+
+
+
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ImageView"></ImageView>
 </LinearLayout>
 	
     <LinearLayout
@@ -36,29 +37,26 @@
 android:layout_width="wrap_content" 
 android:layout_height="wrap_content" 
 android:id="@+id/ipaddress" 
-android:layout_gravity="bottom" android:text="10.0.1.90">
+android:layout_gravity="bottom" android:lines="1" android:width="170sp" android:text="192.168.1.111">
 </EditText>
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/okbutton" android:layout_gravity="bottom" android:background="@drawable/sync">
-</Button><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/up" android:id="@+id/upbutton" android:padding="30dp" android:layout_gravity="center" android:layout_marginLeft="60dp">
+</Button><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/up" android:id="@+id/upbutton" android:padding="30dp" android:layout_gravity="center" android:layout_marginLeft="5dp">
 	</ImageButton></LinearLayout>
 
 </LinearLayout>
     
-    <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1">
+    <LinearLayout android:layout_width="fill_parent" android:orientation="horizontal" android:layout_weight="1" android:layout_height="fill_parent">
 	
-	<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:orientation="horizontal" android:layout_marginLeft="160dp">
-	
-	<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/left" android:id="@+id/leftbutton" android:padding="30dp" android:layout_gravity="center" android:layout_marginRight="40dp">
+	<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/scanHorizontal" android:background="@drawable/scanhorizontal" android:layout_gravity="center"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/homeicon" android:id="@+id/homeButton" android:layout_marginLeft="13dp"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/scanvertical" android:id="@+id/scanVertical" android:layout_marginLeft="15dp"></ImageButton><ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/left" android:id="@+id/leftbutton" android:padding="30dp" android:layout_marginLeft="20dp">
+	</ImageButton><ImageButton android:background="@drawable/right" android:id="@+id/rightbutton" android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="30dp" android:layout_marginLeft="10dp">
 	</ImageButton>
 	
 	
 	
 
-<ImageButton android:background="@drawable/right" android:id="@+id/rightbutton" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="center" android:padding="30dp">
-	</ImageButton></LinearLayout>
-	
-	
-	
+
+
+
 
 </LinearLayout>
     
@@ -67,11 +65,11 @@ android:layout_gravity="bottom" android:text="10.0.1.90">
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:layout_weight="1" android:orientation="horizontal">
 	
-   <ZoomControls android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="55dp" android:id="@+id/zoombutton"></ZoomControls><ImageButton 
+   <ZoomControls android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/zoombutton" android:gravity="bottom" android:layout_gravity="bottom"></ZoomControls><ImageButton 
    android:layout_width="wrap_content" 
    android:layout_height="wrap_content" 
    android:id="@+id/downbutton" 
-   android:padding="30dp" android:background="@drawable/down">
+   android:padding="30dp" android:background="@drawable/down" android:layout_marginLeft="65dp">
    </ImageButton>
 
 
@@ -89,7 +87,8 @@ android:layout_gravity="bottom" android:text="10.0.1.90">
 
 
 
-<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom" android:text="Status ..." android:id="@+id/status"></TextView>
+
+<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/resourceButton" android:layout_gravity="right" android:background="@drawable/resource"></ImageButton><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="bottom" android:text="Status ..." android:id="@+id/status" android:layout_marginLeft="20dp"></TextView>
 </LinearLayout>
 
 </LinearLayout>
