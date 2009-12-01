@@ -7,9 +7,12 @@
  */
 package axis.android;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -31,7 +34,8 @@ public class axis extends Activity {
 	int zoomcontrol = 0;
 	boolean switchvertical = true;
 	boolean switchhorizontal = true;
-	
+
+	ImageView cameraVideo;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -60,7 +64,7 @@ public class axis extends Activity {
 		final Button okButton = (Button) findViewById(R.id.okbutton);
 		final ZoomControls zoom = (ZoomControls) findViewById(R.id.zoombutton);
 		final TextView status = (TextView) findViewById(R.id.status);
-		final ImageView cameraVideo = (ImageView) findViewById(R.id.ImageView);
+		cameraVideo = (ImageView) findViewById(R.id.ImageView);
 		// Buttons are disabled until camera is connected
 		leftButton.setVisibility(View.INVISIBLE);
 		rightButton.setVisibility(View.INVISIBLE);
@@ -82,7 +86,8 @@ public class axis extends Activity {
 
 				camera.movePanTilt("left");
 				status.setText("Left Move");
-				
+				CaptureVideo();
+
 			}
 		});
 
@@ -94,19 +99,6 @@ public class axis extends Activity {
 
 			}
 
-			private void CaptureVideo() {
-				try {
-					URL url = new URL("http://192.168.1.111/axis-cgi/jpg/image.cgi?");
-					InputStream stream = url.openStream();
-					Bitmap bmp = BitmapFactory.decodeStream(stream);
-					cameraVideo.setImageBitmap(bmp);
-					stream.close();
-				} catch(IOException failed){
-					String failText = "Failure: "+failed.getMessage();
-	        		Toast.makeText(axis.this, failText, Toast.LENGTH_LONG).show();
-	        	}
-				
-			}
 		});
 
 		upButton.setOnClickListener(new ImageButton.OnClickListener() {
@@ -116,6 +108,7 @@ public class axis extends Activity {
 				URL urlCalled = camera.getURL();
 				status.setText(urlCalled.toString());
 				status.setText("Up Move");
+				CaptureVideo();
 
 			}
 		});
@@ -125,33 +118,55 @@ public class axis extends Activity {
 
 				camera.movePanTilt("down");
 				status.setText("Down Move");
+				CaptureVideo();
 
 			}
 		});
 
-		okButton.setOnClickListener(new ImageButton.OnClickListener() {
+		okButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
+				boolean validIP = true;
 				String IPaddress = IPfield.getText().toString();
-				Toast.makeText(axis.this, IPaddress, Toast.LENGTH_SHORT).show();
-				camera.setIPAddress(IPaddress, 80);
-				status.setText("Connect Requested");
+				String urlString = "http://" + IPaddress;
+				URL url = null;
+				URLConnection connection = null;
+				try {
+					url = new URL(urlString);
+					connection = url.openConnection();
+					connection.connect();
+				} 
+				catch (MalformedURLException failed) {
+					String failText = "Failure: " + failed.getMessage();
+					Toast.makeText(axis.this, failText, Toast.LENGTH_LONG)
+							.show();
+					validIP = false;
+				}
+				catch (IOException failed) {
+					String failText = "Failure: " + failed.getMessage();
+					Toast.makeText(axis.this, failText, Toast.LENGTH_LONG)
+							.show();
+					validIP = false;
+				}
+			
+				if (validIP) {
+					Toast.makeText(axis.this, IPaddress, Toast.LENGTH_SHORT)
+							.show();
+					camera.setIPAddress(IPaddress, 80);
+					status.setText("Connect Requested");
 
-				// Enable buttons
-				leftButton.setVisibility(View.VISIBLE);
-				rightButton.setVisibility(View.VISIBLE);
-				upButton.setVisibility(View.VISIBLE);
-				downButton.setVisibility(View.VISIBLE);
-				homeButton.setVisibility(View.VISIBLE);
-				scanHorizontal.setVisibility(View.VISIBLE);
-				scanVertical.setVisibility(View.VISIBLE);
-				zoom.setVisibility(View.VISIBLE);
+					// Enable buttons
+					leftButton.setVisibility(View.VISIBLE);
+					rightButton.setVisibility(View.VISIBLE);
+					upButton.setVisibility(View.VISIBLE);
+					downButton.setVisibility(View.VISIBLE);
+					homeButton.setVisibility(View.VISIBLE);
+					scanHorizontal.setVisibility(View.VISIBLE);
+					scanVertical.setVisibility(View.VISIBLE);
+					zoom.setVisibility(View.VISIBLE);
 
-				
+					CaptureVideo();
+				}
 
-				
-				  //Bitmap bmp; bmp =BitmapFactory.decodeFile("/sdcard/photo1.jpg");
-				  //cameraVideo.setImageBitmap(bmp);
-				 
 			}
 		});
 
@@ -160,6 +175,7 @@ public class axis extends Activity {
 
 				camera.movePanTilt("home");
 				status.setText("Home Position");
+				CaptureVideo();
 
 			}
 		});
@@ -173,6 +189,7 @@ public class axis extends Activity {
 					camera.movePanTilt("horizontalend");
 				switchhorizontal = !switchhorizontal;
 				status.setText("Horizontal scan");
+				CaptureVideo();
 
 			}
 		});
@@ -186,7 +203,7 @@ public class axis extends Activity {
 					camera.movePanTilt("verticalend");
 				switchvertical = !switchvertical;
 				status.setText("Vertical scan");
-
+				CaptureVideo();
 			}
 		});
 
@@ -197,7 +214,7 @@ public class axis extends Activity {
 					zoomcontrol += 1000;
 				camera.moveZoom(zoomcontrol);
 				status.setText("Zoom In");
-
+				CaptureVideo();
 			}
 		});
 
@@ -208,7 +225,7 @@ public class axis extends Activity {
 					zoomcontrol -= 1000;
 				camera.moveZoom(zoomcontrol);
 				status.setText("Zoom Out");
-
+				CaptureVideo();
 			}
 		});
 
@@ -219,7 +236,34 @@ public class axis extends Activity {
 
 			}
 		});
-		
-	
+
 	}
+
+	protected void CaptureVideo() {
+		Bitmap bmp = null;
+
+		try {
+			URL url = new URL("http://192.168.1.111/axis-cgi/jpg/image.cgi");
+			InputStream stream = url.openStream();
+			bmp = BitmapFactory.decodeStream(stream);
+			stream.close();
+		} catch (MalformedURLException e) {
+			Toast.makeText(this, "Exception", Toast.LENGTH_LONG).show();
+		} catch (IOException e) {
+			Toast.makeText(this, "Exception", Toast.LENGTH_LONG).show();
+		}
+		catch (Throwable t) {
+			String failText = "Failure: " + t.getMessage();
+			Toast.makeText(axis.this, failText, Toast.LENGTH_LONG)
+					.show();
+        }
+		
+		cameraVideo.setImageBitmap(bmp);
+		
+//		Bitmap bmp; 
+//		bmp=BitmapFactory.decodeFile("/sdcard/cerber.jpg");
+//		cameraVideo.setImageBitmap(bmp);
+		
+	}
+
 }
