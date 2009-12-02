@@ -15,7 +15,7 @@ public class resourceReservations {
 		public int status;
 	}
 	
-	private static Vector<Resource> resources = new Vector();
+	private static Vector<Resource> resources = new Vector<Resource>();
 	
 	public resourceReservations(){
 		Resource pan = new Resource();
