@@ -31,11 +31,12 @@ import android.widget.ZoomControls;
 public class axis extends Activity {
 
 	Camera camera = new Camera(); // Create a camera object
-	int zoomcontrol = 0;
+	ImageView cameraVideo;	int zoomcontrol = 0;
 	boolean switchvertical = true;
 	boolean switchhorizontal = true;
+    masterPhone mPhone = null;
 
-	ImageView cameraVideo;
+
 
 	/** Called when the activity is first created. */
 	@Override
@@ -74,6 +75,24 @@ public class axis extends Activity {
 		scanHorizontal.setVisibility(View.INVISIBLE);
 		scanVertical.setVisibility(View.INVISIBLE);
 		zoom.setVisibility(View.INVISIBLE);
+
+        clientPhone cl = new clientPhone();
+        Thread clt = new Thread(cl); 
+
+        try {
+        	clt.start();
+			Thread.sleep(1000);
+			if (!clt.isAlive()){
+				mPhone = new masterPhone();
+	           	Toast.makeText(axis.this, "Master", Toast.LENGTH_SHORT).show(); 
+	            
+				//camera.movePanTilt(30, 120);
+				status.setText("Master");
+			}
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			
+		}
 
 		checkoutButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
