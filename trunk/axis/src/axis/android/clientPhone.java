@@ -19,20 +19,31 @@ public class clientPhone implements Runnable {
 
 	public void run() {
 		// TODO Auto-generated method stub
-
 		try {
-			cSocket = new Socket("255.255.255.255", masterPhone.SERVERPORT);
-			if (cSocket != null) {
-				in = new BufferedReader(new InputStreamReader(cSocket
-						.getInputStream()));
-				out = new PrintWriter(cSocket.getOutputStream(), true);
-				while (runClient) {
+			while (runClient) {
+				if (cSocket == null) {
+					cSocket = new Socket("255.255.255.255",
+							masterPhone.SERVERPORT);
+					// If the Server port is reserved try an observer port
+					if (cSocket == null || !cSocket.isConnected()) {
+						cSocket = new Socket("255.255.255.255",
+								masterPhone.OBSERVERPORT);
+					}
+
+					if (cSocket != null) {
+						in = new BufferedReader(new InputStreamReader(cSocket
+								.getInputStream()));
+						out = new PrintWriter(cSocket.getOutputStream(), true);
+					}
+				}
+
+				if (cSocket != null) {
 					if (cSocket.isConnected()) {
 						if (commandReq.length() > 0) {
 							out.println(commandReq);
 							Thread.sleep(10);
 						}
-						// do I need a sleep here?
+
 						String clientLine = in.readLine();
 						if (clientLine != null) {
 							if (clientLine
@@ -53,7 +64,12 @@ public class clientPhone implements Runnable {
 
 						if (observer) {
 							observerCounter += 10;
-							if (observerCounter >= 10000) {
+							if (observerCounter >= 5000) {
+								// as an observer, try for the server port again
+								cSocket.close();
+								cSocket = null;
+								in.close();
+								out.close();
 								commandReq = "DISCOVERY";
 							}
 						}
@@ -71,7 +87,6 @@ public class clientPhone implements Runnable {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 		}
-
 	}
 
 	public boolean requestReservation(String resReq) {
@@ -92,7 +107,6 @@ public class clientPhone implements Runnable {
 				} else {
 					// Lost connection to the master .. need to close client and
 					// start master process
-
 					cSocket = null;
 				}
 			} catch (IOException e) {

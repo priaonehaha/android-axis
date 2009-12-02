@@ -9,34 +9,35 @@ import java.net.Socket;
 public class masterPhoneServerThread extends Thread {
 
     private boolean runMaster = true;
-    private boolean connected = false; 
+    private static boolean connected = false; 
 	private static final int RESOURCE_CLIENT_OWNER = 2;
-    
+	private static BufferedReader in;
+	private static PrintWriter out;
     private Socket socket = null;
 
     public masterPhoneServerThread(Socket socket) {
 		super("masterPhoneServerThread");
 		this.socket = socket;
+		try {
+			in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			out = new PrintWriter(this.socket.getOutputStream(), true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
+		
   }
 
 	public void run() {
 		int counter = 0;
 		while (runMaster){
-			
 			try {
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
-				PrintWriter out = new PrintWriter(
-						socket.getOutputStream(), true);
-
 				//check for slave
 				String clientReq = in.readLine();
 
-				if (clientReq != null) {
+				if (clientReq != null  && socket.isConnected()) {
 					counter = 0;
 					if (clientReq.compareToIgnoreCase("DISCOVERY") == 0){
-						if (!connected){
-							connected = true;
+						if (socket.getLocalPort() == masterPhone.SERVERPORT){
 							out.print("CONFIRM_DISCOVERY");
 							
 						}else{
@@ -68,10 +69,10 @@ public class masterPhoneServerThread extends Thread {
 						}
 						
 					}
-				} else if ( counter == 9000){
+				} else if ( counter >= 9000){
 					out.println("PING");
 				} else if ( counter > 10000){
-					connected = false;
+					counter = 0;
 				}
 				
 				Thread.sleep(10);
