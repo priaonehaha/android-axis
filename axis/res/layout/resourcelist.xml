@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:orientation="vertical" android:layout_height="wrap_content" android:layout_width="wrap_content" android:stretchColumns="0">
+
+     <TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Vertical control"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxVertical"/>
+     </TableRow><TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Horizontal control"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxHorizontal"/>
+     </TableRow><TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Zoom control"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxZoom"/>
+     </TableRow><TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Home preset"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxHome"/>
+     </TableRow><TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Full pan"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxPan"/>
+     </TableRow>
+
+     <TableRow>
+          <TextView android:textColor="#ffffff" android:textSize="16px" android:layout_marginLeft="6dip"
+               android:layout_gravity="center_vertical" android:text="Full tilt"/>
+          <CheckBox android:layout_gravity="right|top" android:id="@+id/checkboxTilt"/>
+     <TableRow>
+          
+     </TableRow></TableRow><Button android:layout_height="wrap_content" android:id="@+id/checkoutButton" android:text="Checkout" android:layout_gravity="center" android:textColor="#347C17" android:layout_width="wrap_content" android:layout_marginLeft="60dp" android:layout_marginRight="60dp" android:layout_marginTop="20dp"/>
+
+     
+</TableLayout> 
