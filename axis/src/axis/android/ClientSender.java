@@ -1,0 +1,44 @@
+package axis.android;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+import android.os.Handler;
+
+public class ClientSender implements Runnable {
+	
+	String serverAddress = axis.serverAddress;
+	Handler clientSenderHandler;
+	ClientSender(Handler aHandler) {
+		clientSenderHandler = aHandler;
+	}
+
+	public void run() {
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			displayStatus(" Client Socket created - ");
+			byte[] buf = new byte[256];
+			buf = (axis.Resources).getBytes();
+
+			InetAddress address = InetAddress.getByName(serverAddress);
+			DatagramPacket packet = new DatagramPacket(buf, buf.length,
+					address, 4444);
+			socket.send(packet);
+
+			displayStatus("Client Packet sent - ");
+
+		} catch (final Exception e) {
+			displayStatus(" ERROR: " + e);
+		}
+	}
+
+	public void displayStatus(final String status) {
+		axis.status.post(new Runnable() {
+			public void run() {
+				axis.status.append(status);
+			}
+		});
+	}
+}
+

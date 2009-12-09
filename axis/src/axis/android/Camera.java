@@ -107,12 +107,10 @@ public class Camera {
 	 */
 	public void moveZoom(int z) {
 		String command;
-
-		String zDirection = String.valueOf(z);
-
+		
 		command = "axis-cgi/com/ptz.cgi?camera=" + channel;
 		command = command + "&zoom=";
-		command = command + zDirection;
+		command = command + z;
 
 		try {
 			runUrl(command);

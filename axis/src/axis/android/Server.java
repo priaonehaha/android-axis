@@ -9,11 +9,11 @@ package axis.android;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 import android.os.Handler;
 
 public class Server implements Runnable {
+	
 	static String received = "111111";
 	Handler serverHandler;
 	Server(Handler aHandler) {
@@ -36,7 +36,7 @@ public class Server implements Runnable {
 				socket.receive(packet);
 				received = new String(packet.getData(), 0, packet.getLength());
 				axis.ResourceSequence = received;
-				displayStatus("Received: " + received + " - ");
+				displayStatus("Server Received: " + received + " - ");
 				
 				serverHandler.post(new Runnable() {
 					public void run() {
@@ -44,15 +44,6 @@ public class Server implements Runnable {
 					}
 				});
 
-				buf = (axis.Resources).getBytes();
-				// send the response to the client at "address" and "port"
-				InetAddress address = packet.getAddress();
-				int port = packet.getPort();
-
-				packet = new DatagramPacket(buf, buf.length, address, port);
-				socket.send(packet);
-
-				displayStatus(" Server Sent packet back - ");
 			}
 		}
 

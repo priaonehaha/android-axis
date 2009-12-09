@@ -33,8 +33,9 @@ public class axis extends Activity {
 	Camera camera = new Camera(); // Create a camera object
 	int zoomcontrol = 0;
 	boolean switchvertical = true, switchhorizontal = true,
-			clientApplication = false;
-	static String serverAddress, IPaddress, Resources = "111111", ResourceSequence = "111111";
+			clientApplication = false, serverApplication = false;
+	static String serverAddress, clientAddress, IPaddress,
+			Resources = "111111", ResourceSequence = "111111";
 	static TextView status;
 	static ImageView cameraVideo;
 	static Dialog requestdialog;
@@ -47,6 +48,8 @@ public class axis extends Activity {
 
 		final Handler ServerUIHandler = new Handler();
 		final Handler ClientUIHandler = new Handler();
+		final Handler ServerSenderUIHandler = new Handler();
+		final Handler ClientSenderUIHandler = new Handler();
 		final Handler VideoUIHandler = new Handler();
 
 		// Dialog resource list
@@ -62,7 +65,7 @@ public class axis extends Activity {
 		// Dialog Accept/Reject Requests
 		requestdialog = new Dialog(this);
 		requestdialog.setContentView(R.layout.request);
-		requestdialog.setTitle("Client Request");
+		requestdialog.setTitle("Peer Request");
 		clientserverdialog.show();
 
 		// CheckBoxes
@@ -102,6 +105,8 @@ public class axis extends Activity {
 				.findViewById(R.id.ClientApp);
 		final EditText serverIP = (EditText) clientserverdialog
 				.findViewById(R.id.serverip);
+		final EditText clientIP = (EditText) clientserverdialog
+				.findViewById(R.id.clientip);
 		Button acceptRequest = (Button) requestdialog
 				.findViewById(R.id.acceptRequest);
 		Button rejectRequest = (Button) requestdialog
@@ -128,7 +133,9 @@ public class axis extends Activity {
 		// Server application choice
 		serverApp.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				clientApplication = false;
+				serverApplication = true;
+				clientAddress = clientIP.getText().toString();
+				serverAddress = serverIP.getText().toString();
 				new Thread(new Server(ServerUIHandler)).start();
 				clientserverdialog.dismiss();
 			}
@@ -138,7 +145,9 @@ public class axis extends Activity {
 		clientApp.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				clientApplication = true;
+				clientAddress = clientIP.getText().toString();
 				serverAddress = serverIP.getText().toString();
+				new Thread(new Client(ClientUIHandler)).start();
 				clientserverdialog.dismiss();
 			}
 		});
@@ -154,8 +163,10 @@ public class axis extends Activity {
 				ResourcesBinary(checkboxPan.isChecked());
 				ResourcesBinary(checkboxTilt.isChecked());
 
-				if (clientApplication)
-					new Thread(new Client(ClientUIHandler)).start();
+				if (serverApplication)
+					new Thread(new ServerSender(ServerSenderUIHandler)).start();
+				else if (clientApplication)
+					new Thread(new ClientSender(ClientSenderUIHandler)).start();
 
 				dialog.dismiss();
 			}
@@ -180,7 +191,7 @@ public class axis extends Activity {
 		// Up direction control
 		upButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
-				camera.movePanTilt("up");
+				camera.movePanTilt("down");
 				status.append("Up Move - ");
 			}
 		});
@@ -188,7 +199,7 @@ public class axis extends Activity {
 		// Down direction control
 		downButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
-				camera.movePanTilt("down");
+				camera.movePanTilt("up");
 				status.append("Down Move - ");
 			}
 		});
@@ -259,7 +270,7 @@ public class axis extends Activity {
 		// Zoom in control
 		zoom.setOnZoomInClickListener(new ZoomControls.OnClickListener() {
 			public void onClick(View v) {
-				if (zoomcontrol < 9000) // Maximum zoom-in value
+				if (zoomcontrol < 8500) // Maximum zoom-in value
 					zoomcontrol += 1000;
 				camera.moveZoom(zoomcontrol);
 				status.append("Zoom In - ");
@@ -269,7 +280,7 @@ public class axis extends Activity {
 		// Zoom out control
 		zoom.setOnZoomOutClickListener(new ZoomControls.OnClickListener() {
 			public void onClick(View v) {
-				if (zoomcontrol >= 1000) // Maximum zoom-out value
+				if (zoomcontrol > 1500) // Maximum zoom-out value
 					zoomcontrol -= 1000;
 				camera.moveZoom(zoomcontrol);
 				status.append("Zoom Out - ");
@@ -357,19 +368,23 @@ public class axis extends Activity {
 			else if (x < 0)
 				camera.movePanTilt("left");
 			if (y > 0)
-				camera.movePanTilt("up");
-			else if (y < 0)
 				camera.movePanTilt("down");
+			else if (y < 0)
+				camera.movePanTilt("up");
 			break;
 
 		// Zoom
 		case MotionEvent.ACTION_DOWN:
-			if (zoomcontrol < 9000) // Maximum zoom-in value
+			if (zoomcontrol < 8500) // Maximum zoom-in value
 				zoomcontrol += 1000;
 			camera.moveZoom(zoomcontrol);
 
 			break;
 		}
 		return true;
+	}
+	
+	public void onTerminate() {
+		this.finish();
 	}
 }

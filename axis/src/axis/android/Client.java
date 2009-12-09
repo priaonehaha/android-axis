@@ -9,51 +9,49 @@ package axis.android;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 import android.os.Handler;
 
 public class Client implements Runnable {
+	
 	static String received = "111111";
-	String serverAddress = axis.serverAddress;
 	Handler clientHandler;
 	Client(Handler aHandler) {
 		clientHandler = aHandler;
 	}
 
 	public void run() {
+		DatagramSocket socket = null;
+
 		try {
-			DatagramSocket socket = new DatagramSocket();
-			displayStatus(" Socket created - ");
+
+			socket = new DatagramSocket(4445);
 			byte[] buf = new byte[256];
-			buf = (axis.Resources).getBytes();
+			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 
-			InetAddress address = InetAddress.getByName(serverAddress);
-			DatagramPacket packet = new DatagramPacket(buf, buf.length,
-					address, 4444);
-			socket.send(packet);
+			// Start server loop
+			while (true) {
 
-			displayStatus("Packet sent - ");
+				displayStatus("Waiting for server packet - ");
+				socket.receive(packet);
+				received = new String(packet.getData(), 0, packet.getLength());
+				axis.ResourceSequence = received;
+				displayStatus("Client Received: " + received + " - ");
+				
+				clientHandler.post(new Runnable() {
+					public void run() {
+						axis.requestdialog.show();
+					}
+				});
+			}
+		}
 
-			packet = new DatagramPacket(buf, buf.length);
-			socket.receive(packet);
-
-			displayStatus("Packet received - ");
-			received = new String(packet.getData(), 0, packet.getLength());
-			axis.ResourceSequence = received;
-
-			clientHandler.post(new Runnable() {
-				public void run() {
-					axis.updateControls();
-				}
-			});
-
-			displayStatus("Received: " + received + " - ");
-			socket.close();
-
-		} catch (final Exception e) {
+		catch (final Exception e) {
 			displayStatus(" ERROR: " + e);
 		}
+
+		socket.close();
+		displayStatus("Server Socket Closed ... ");
 	}
 
 	public void displayStatus(final String status) {
